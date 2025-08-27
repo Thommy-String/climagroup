@@ -1,0 +1,153 @@
+:root{
+  --sp-page: #fff;
+  --sp-text: #0f172a;
+  --sp-muted: #6b7280;
+  --sp-radius: 28px;
+  --sp-shadow: 0 0 0 1px rgba(0,0,0,.06) inset, 0 18px 44px rgba(0,0,0,.12);
+  --sp-maxw: 1200px;
+}
+
+.sp{
+  background: var(--sp-page);
+  padding: clamp(28px, 6vw, 72px) 0;
+  font-family: var(--font-base, "Poppins", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif);
+}
+.sp__container{
+  max-width: var(--sp-maxw);
+  margin: 0 auto;
+  padding: 0 clamp(16px, 4vw, 24px);
+}
+
+.sp__head{
+  text-align: center;
+  margin-bottom: clamp(16px, 3vw, 28px);
+}
+.sp__title{
+  margin: 0;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--sp-text);
+  font-size: clamp(1.4rem, 3.6vw, 2.2rem);
+}
+.sp__sub{
+  margin: 8px auto 0;
+  color: var(--sp-muted);
+  font-size: clamp(.95rem, 2vw, 1.05rem);
+  max-width: 62ch;
+}
+
+/* ======= Card cliccabile ======= */
+.sp__card{
+  position: relative;
+  display: block;
+  border-radius: var(--sp-radius);
+  overflow: hidden;
+  box-shadow: var(--sp-shadow);
+  text-decoration: none;
+  color: inherit;
+  isolation: isolate;
+  background: #0b1224; /* fallback sotto immagine */
+}
+.sp__card:not(:last-child) {
+  margin-bottom: clamp(20px, 4vw, 40px);
+}
+
+.sp__media{
+  position: relative;
+  aspect-ratio: 21 / 9; /* wide, cinematica alla Apple */
+  overflow: hidden;
+}
+.sp__img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.02);
+  will-change: transform;
+  transition: transform .6s cubic-bezier(.2,.7,.2,1);
+}
+.sp__scrim{
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(8,12,22,.35) 0%, rgba(8,12,22,.55) 55%, rgba(8,12,22,.72) 100%);
+  pointer-events: none;
+}
+
+/* Copy sovrapposto in basso a sinistra */
+.sp__copy{
+  position: absolute;
+  left: clamp(16px, 3.6vw, 40px);
+  right: clamp(16px, 3.6vw, 40px);
+  bottom: clamp(16px, 3.6vw, 40px);
+  color: #fff;
+}
+.sp__eyebrow{
+  margin: 0 0 6px 0;
+  font-weight: 600;
+  letter-spacing: .02em;
+  font-size: clamp(12px, 1.2vw, 13px);
+  color: #d1d5db;
+}
+.sp__h{
+  margin: 0;
+  font-weight: 800;
+  letter-spacing: -.015em;
+  font-size: clamp(1.3rem, 3vw, 2rem);
+  line-height: 1.15;
+}
+.sp__hSub{
+  display: block;
+  font-weight: 600;
+  font-size: .9em;
+  letter-spacing: 0;
+  opacity: .95;
+  margin-top: 2px;
+}
+
+.sp__badges{
+  display: flex; gap: 8px; flex-wrap: wrap;
+  list-style: none; margin: 12px 0 0; padding: 0;
+}
+.sp__chip{
+  background: rgba(255,255,255,.12);
+  border: 1px solid rgba(255,255,255,.22);
+  color: #fff;
+  font-weight: 600;
+  font-size: 12px;
+  padding: 6px 10px;
+  border-radius: 999px;
+}
+
+.sp__cta{
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 14px;
+  font-weight: 700;
+  font-size: clamp(.95rem, 1.8vw, 1.05rem);
+  border-bottom: 1.5px solid rgba(255,255,255,.5);
+}
+.sp__chev{
+  display: inline-block;
+  transform: translateX(0);
+  transition: transform .25s ease;
+}
+
+/* Hover / focus: zoom lieve + freccia che scivola */
+.sp__card:hover .sp__img{ transform: scale(1.06); }
+.sp__card:hover .sp__chev{ transform: translateX(3px); }
+
+.sp__card:focus-visible{
+  outline: 2px solid var(--color-primary, #2563eb);
+  outline-offset: 3px;
+  border-radius: calc(var(--sp-radius) + 2px);
+}
+
+/* Riduce motion per accessibilità */
+@media (prefers-reduced-motion: reduce){
+  .sp__img{ transition: none; transform: none; }
+  .sp__chev{ transition: none; }
+}
+
+/* Mobile tweak: rapporto più alto per visibilità immagine */
+@media (max-width: 520px){
+  .sp__media{ aspect-ratio: 16 / 9; }
+}

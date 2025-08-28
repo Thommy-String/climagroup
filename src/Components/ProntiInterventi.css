@@ -1,0 +1,178 @@
+/* ====== PRONTI INTERVENTI — CAROSELLO UNA SOLA RIGA ====== */
+.pi {
+  background: var(--color-light);
+  padding: clamp(32px, 6vw, 64px) 0;
+  position: relative; /* per posizionare i controlli */
+}
+
+/* Contenitore carosello: SEMPRE orizzontale, MAI a capo */
+.pi__container {
+  display: flex !important;         /* forza flex in caso di reset globali */
+  flex-direction: row !important;   /* evita layout in colonna */
+  flex-wrap: nowrap !important;     /* MAI andare a capo */
+  align-items: stretch;
+  gap: 16px;
+
+  overflow-x: auto;                 /* scroll orizzontale */
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding: 0 clamp(16px, 4vw, 32px);
+
+  /* Snap morbido alle card */
+  scroll-snap-type: x proximity;
+  scroll-padding-left: clamp(16px, 4vw, 32px);
+}
+.pi__container::-webkit-scrollbar { display: none; }
+
+/* Card nel carosello: larghezza fissa relativa, nessun shrink */
+.pi__card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+
+  /* base di larghezza: tra 280px e 480px, responsive */
+  flex: 0 0 clamp(320px, 42vw, 600px) !important;  /* non crescere, non ridursi */
+  min-width: clamp(320px, 42vw, 600px);            /* evita compressione che può causare wrap */
+
+  padding: 0;
+  text-align: left;
+
+  display: flex;
+  flex-direction: column;    /* testi sopra, immagine sotto */
+  justify-content: flex-start;
+  vertical-align: top;
+
+  height: clamp(520px, 65vw, 660px);  /* altezza aumentata per immagine più alta */
+  overflow: hidden;
+  border-radius: 16px;
+  transition: transform 0.2s ease;
+  scroll-snap-align: start;
+  position: relative;
+}
+.pi__card:hover { transform: translateY(-4px); }
+
+.pi__copy {
+  padding: 42px 30px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  /* tolto flex-basis */
+  flex: 0 0 auto; /* occupa solo lo spazio necessario */
+}
+
+/* Wrapper immagine: sempre in basso e ~2/3 della card */
+/* --- BLOCCO IMMAGINE: occupa ~2/3 della card, sempre visibile --- */
+.pi__media {
+  position: relative;
+  flex: 2;              /* <-- aumenta la proporzione per immagine più alta */
+  min-height: 0;        /* fix per flexbox */
+}
+
+/* Testi */
+.pi__eyebrow {
+  font-size: 0.85rem;      /* un pelo più grande */
+  font-weight: 400;        /* più grassetto */
+  color: var(--color-muted);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+
+.pi__title {
+  font-size: clamp(1.55rem, 2.6vw, 1.9rem); /* titolo leggermente più grande */
+  font-weight: 800;
+  color: var(--color-text);
+  margin-bottom: 14px;
+  line-height: 1.2;
+}
+
+/* Immagine: riempie tutta la card in orizzontale e l'altezza del wrapper */
+.pi__image{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center bottom; /* spinge l'immagine fino al fondo */
+  display: block;
+}
+
+/* Overlay: più spazio in basso e sopra l’immagine in tutti i casi */
+.pi__overlay{
+  position: absolute;        /* stacca l'overlay dal flow */
+  left: 0;
+  right: 0;
+  bottom: 0;                 /* agganciato al fondo dell'immagine */
+  height: 15%;               /* fascia sfumata in basso */
+  display: block;
+  background: linear-gradient(to top, rgba(0,0,0,.01) 0.1%, rgba(0,0,0,0));
+  backdrop-filter: blur(0.5px);
+  pointer-events: none;      /* non blocca i click sul bottone */
+  z-index: 1;                /* sotto al bottone, sopra alla foto */
+}
+
+.pi__cta{
+  position: absolute;        /* posiziona nella card */
+  right: 16px;
+  bottom: 14px;
+  z-index: 2;                /* sopra overlay */
+  appearance: none;
+  border: 0;
+  border-radius: 999px;
+  padding: 10px 14px;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 1;
+  background: var(--color-primary);
+  color: #fff;
+  text-decoration: none;
+  box-shadow: 0 2px 8px rgba(0,0,0,.15);
+  cursor: pointer;
+  transition: transform .15s ease, box-shadow .2s ease, opacity .2s ease;
+}
+.pi__cta:hover{ transform: translateY(-1px); box-shadow: 0 4px 14px rgba(0,0,0,.18);} 
+.pi__cta:active{ transform: translateY(0); }
+.pi__cta:focus-visible{ outline: 2px solid #fff; outline-offset: 2px; }
+
+/* Controlli carosello (freccette) */
+.pi__controls {
+  position: absolute;
+  right: clamp(12px, 3vw, 28px);
+  bottom: clamp(10px, 2.5vw, 1px);
+  display: flex;
+  gap: 12px;
+  z-index: 2;
+}
+
+.pi__nav {
+  width: 42px;
+  height: 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 999px;
+  background: #f2f2f7;          /* chip stile iOS */
+  color: #3a3a3c;
+  box-shadow: 0 1px 0 rgba(0,0,0,.02), 0 1.5px 4px rgba(0,0,0,.08);
+  cursor: pointer;
+  transition: transform .15s ease, background .2s ease, box-shadow .2s ease;
+}
+.pi__nav:hover { transform: translateY(-1px); }
+.pi__nav:active { transform: translateY(0); }
+.pi__nav:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 2px; }
+.pi__nav[disabled] { opacity: .45; cursor: default; }
+
+
+/* (Opzionale) su schermi molto piccoli lasciamo un po’ più spazio al media */
+@media (max-width: 480px){
+  .pi__card {
+    flex-basis: clamp(240px, 78vw, 320px) !important;
+    min-width: clamp(240px, 78vw, 320px);
+    height: clamp(520px, 100vw, 660px); /* altezza aumentata per immagine più alta */
+  }
+  .pi__copy{ flex-basis: 20%; padding: 42px 30px 0px; }
+  .pi__media{ flex-basis: 80%; } /* aumenta proporzione immagine */
+  .pi__title {
+    font-size: clamp(1.2rem, 5vw, 1.4rem);
+  }
+}
